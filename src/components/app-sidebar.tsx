@@ -24,11 +24,11 @@ const items: SidebarItem[] = [
   { title: "Home", url: "/dashboard", icon: Home, roles: ['admin', 'user'] },
   { title: "My Library", url: "/library", icon: BookOpen, roles: ['user'] },
   { title: "Browse Books", url: "/browse", icon: Search, roles: ['user'] },
-  { title: "Tutorials", url: "/admin/tutorials", icon: Video, roles: ['admin'] },
-  { title: "Manage Users", url: "/admin/users", icon: Users, roles: ['admin'] },
-  { title: "Manage Books", url: "/admin/books", icon: BookOpen, roles: ['admin'] },
-  { title: "Manage Genres", url: "/admin/genres", icon: Tag, roles: ['admin'] },
-  { title: "Moderate Reviews", url: "/admin/reviews", icon: Inbox, roles: ['admin'] },
+  { title: "Tutorials", url: "/dashboard/admin/tutorials", icon: Video, roles: ['admin'] },
+  { title: "Manage Users", url: "/dashboard/admin/users", icon: Users, roles: ['admin'] },
+  { title: "Manage Books", url: "/dashboard/admin/books", icon: BookOpen, roles: ['admin'] },
+  { title: "Manage Genres", url: "/dashboard/admin/genres", icon: Tag, roles: ['admin'] },
+  { title: "Moderate Reviews", url: "/dashboard/admin/reviews", icon: Inbox, roles: ['admin'] },
 
 ];
 

@@ -5,15 +5,19 @@ import Link from 'next/link';
 
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 export default function Navbar() {
 
+  const user= useSelector((state:RootState) => state.bookWormAuth.user);
+
   const pathname = usePathname();
 
-  const isAdmin = "admin" === 'admin';
+  const isAdmin = user?.role === 'admin';
 
  const userNav = [
-    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Home', href: '/' },
     { name: 'Browse Books', href: '/browse' },
     { name: 'My Library', href: '/library' },
     { name: 'Tutorials', href: '/tutorials' },

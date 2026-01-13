@@ -11,25 +11,25 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUsers();
+    // fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get("/users");
-      setUsers(response.data.data);
-    } catch (error) {
-      toast.error("Failed to load users");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await api.get("/users");
+  //     setUsers(response.data.data);
+  //   } catch (error) {
+  //     toast.error("Failed to load users");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const updateRole = async (userId: string, newRole: string) => {
     try {
       await api.patch(`/users/${userId}/role`, { role: newRole });
       toast.success("User role updated");
-      fetchUsers();
+      // fetchUsers();
     } catch (error) {
       toast.error("Failed to update role");
     }
