@@ -45,42 +45,7 @@ BookWorm is a full-stack book library application where users can manage their p
     # For Frontend
     cd BookWorm_Frontend && npm install
 
-    # For Backend
-    cd server && npm install
-    ```
+  
 
-3.  **Setup Environment Variables (.env):**
-    Create a `.env` file in the server directory:
-    ```env
-    PORT=5000
-    DATABASE_URL=your_mongodb_url
-    JWT_ACCESS_SECRET=your_secret
-    ```
-
-4.  **Run the application:**
-    ```bash
-    # Backend
-    npm run start:dev
-
-    # Frontend
-    npm run dev
-    ```
-
----
-
-## 🐛 Challenges & Debugging (My Strength)
-
-During the development, I focused heavily on solving complex bugs to ensure a smooth user experience. 
-
--   **CORS Fix:** Solved cross-origin resource sharing issues by specifically white-listing production domains.
--   **Data Integrity:** Implemented **MongoDB Transactions (session)** in the library service to prevent partial data updates during complex operations.
--   **Image Rendering:** Fixed Next.js Image component crashes by implementing a robust fallback mechanism for empty `src` attributes.
-
----
-
-## 👨‍💻 Author
-
-**[Your Name]**
-*Aspiring Associate Web Instructor | Problem Solver | Full Stack Developer*
 
 ---
