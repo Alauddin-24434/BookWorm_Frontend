@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 BookWorm - A Premium Book Library Management System
 
-## Getting Started
+BookWorm is a full-stack book library application where users can manage their personal reading collections, track progress, and share reviews. Built with the **MERN** stack and **Redux Toolkit**, it focuses on a seamless user experience and robust data management.
 
-First, run the development server:
+**Live Link:** [https://bookworm-khaki-mu.vercel.app](https://bookworm-khaki-mu.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   **Smart Library Management:** Add books to different shelves: *Want to Read*, *Currently Reading*, and *Read*.
+-   **Real-time Progress Tracking:** Users can track their reading journey with visual progress bars.
+-   **Review System:** An approved review system where users can share feedback and ratings.
+-   **Advanced Debugging:** Robust error handling and CORS-enabled secure API communication.
+-   **Responsive UI:** Fully responsive design built with **Tailwind CSS** and **Lucide React** icons.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+### Frontend:
+-   **Next.js 16** (App Router)
+-   **Redux Toolkit (RTK Query)** for state management and API calls.
+-   **Tailwind CSS** for premium styling.
+-   **Lucide React** for icons.
+-   **React Hot Toast** for instant notifications.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend:
+-   **Node.js & Express.js**
+-   **MongoDB & Mongoose** (with Transaction support for data integrity).
+-   **TypeScript** for type safety.
+-   **CORS** & **JWT** for secure communication.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Installation & Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Alauddin-24434/BookWorm_Frontend(https://github.com/Alauddin-24434/BookWorm_Frontend)
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2.  **Install dependencies:**
+    ```bash
+    # For Frontend
+    cd BookWorm_Frontend && npm install
+
+    # For Backend
+    cd server && npm install
+    ```
+
+3.  **Setup Environment Variables (.env):**
+    Create a `.env` file in the server directory:
+    ```env
+    PORT=5000
+    DATABASE_URL=your_mongodb_url
+    JWT_ACCESS_SECRET=your_secret
+    ```
+
+4.  **Run the application:**
+    ```bash
+    # Backend
+    npm run start:dev
+
+    # Frontend
+    npm run dev
+    ```
+
+---
+
+## 🐛 Challenges & Debugging (My Strength)
+
+During the development, I focused heavily on solving complex bugs to ensure a smooth user experience. 
+
+-   **CORS Fix:** Solved cross-origin resource sharing issues by specifically white-listing production domains.
+-   **Data Integrity:** Implemented **MongoDB Transactions (session)** in the library service to prevent partial data updates during complex operations.
+-   **Image Rendering:** Fixed Next.js Image component crashes by implementing a robust fallback mechanism for empty `src` attributes.
+
+---
+
+## 👨‍💻 Author
+
+**[Your Name]**
+*Aspiring Associate Web Instructor | Problem Solver | Full Stack Developer*
+
+---
