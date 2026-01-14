@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 export default function ShelfActions({ bookId }: { bookId: string }) {
   const [loadingShelf, setLoadingShelf] = useState<string | null>(null);
-  const user = "6965e7f5eeeeab78d5620286"; // Replace with your auth logic
 
   const addToShelf = async (shelfType: "wantToRead" | "currentlyReading" | "read") => {
     setLoadingShelf(shelfType);
@@ -14,7 +13,7 @@ export default function ShelfActions({ bookId }: { bookId: string }) {
       const res = await fetch("http://localhost:5000/api/v1/user-library/add-book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user, book: bookId, shelfType }),
+        body: JSON.stringify({ book: bookId, shelfType }),
       });
 
       if (!res.ok) throw new Error("Failed to update shelf");

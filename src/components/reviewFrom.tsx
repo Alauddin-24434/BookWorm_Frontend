@@ -8,7 +8,7 @@ import { useAddReviewMutation } from "@/redux/features/reviews/reviewApi";
 export default function ReviewForm({ bookId }: { bookId: string }) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
-  const userId = "6965e7f5eeeeab78d5620286"; 
+  
 
   const [addReview, { isLoading: submitting }] = useAddReviewMutation();
 
@@ -20,7 +20,7 @@ export default function ReviewForm({ bookId }: { bookId: string }) {
 
     try {
       await addReview({ 
-        user: userId,
+        
         book: bookId,
         rating, 
         comment 
