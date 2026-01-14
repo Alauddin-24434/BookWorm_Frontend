@@ -1,5 +1,5 @@
 "use client";
- import { Edit, Trash2 } from "lucide-react"; 
+import { Book, Edit, Trash2 } from "lucide-react";
 
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -46,7 +46,7 @@ export default function AdminGenresPage() {
   };
 
   // const handleDelete = async (id: string) => {
- 
+
   //   try {
   //     // 4. Use delete mutation
   //     await deleteGenre(id).unwrap();
@@ -74,24 +74,20 @@ export default function AdminGenresPage() {
     setShowModal(false);
   };
 
-  const columns: TableColumn[] = [
-    { key: "name", label: "Genre Name" },
-    
-  ];
+  const columns: TableColumn[] = [{ key: "name", label: "Genre Name" }];
 
+  const actions = (row: any) => (
+    <div className="flex items-center justify-center space-x-4">
+      {/* Edit Button with Icon */}
+      <button
+        onClick={() => startEdit(row)}
+        className="p-2 rounded-full cursor-pointer text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+        title="Edit Genre"
+      >
+        <Edit size={18} />
+      </button>
 
-const actions = (row: any) => (
-  <div className="flex items-center justify-center space-x-4">
-    {/* Edit Button with Icon */}
-    <button
-      onClick={() => startEdit(row)}
-      className="p-2 rounded-full cursor-pointer text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
-      title="Edit Genre"
-    >
-      <Edit size={18} />
-    </button>
-
-    {/* Delete Button with Icon
+      {/* Delete Button with Icon
     <button
       onClick={() => handleDelete(row._id)}
       className="p-2 rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
@@ -99,23 +95,27 @@ const actions = (row: any) => (
     >
       <Trash2 size={18} />
     </button> */}
-  </div>
-);
+    </div>
+  );
   return (
     <div className="px-2 py-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row w-full justify-between p-4 gap-4 mb-8 border rounded-lg items-center">
-        <h1 className="text-4xl font-serif font-bold text-gray-900">
-          Manage Genres
-        </h1>
-        <div className="w-full md:w-auto flex justify-end">
-          <button
-            onClick={openModal}
-          className="flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-200 transition-all font-bold active:scale-95"
-          >
-            Add New Genre
-          </button>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">
+            {" "}
+            Manage Genres
+          </h1>
+          <p className="text-gray-500 text-sm">
+            Manage your library's digital collection
+          </p>
         </div>
+        <button
+          onClick={openModal}
+          className="w-full md:w-auto flex items-center cursor-pointer justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow-md transition-all"
+        >
+          <Book size={20} /> Add New Genre
+        </button>
       </div>
 
       {/* Table - Loading is now handled by RTK Query */}
@@ -128,7 +128,7 @@ const actions = (row: any) => (
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between border-b px-6 py-4">
               <h2 className="text-xl font-serif font-semibold text-gray-900">

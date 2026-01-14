@@ -88,11 +88,12 @@ const baseApi = createApi({
   tagTypes: [
 
     'User',
-    'Review',
+    'Reviews',
     'Genres',
     'Books',
     'Users',
-    'Tutorials'
+    'Tutorials',
+    'Library'
   ],
   endpoints: () => ({}),
 });

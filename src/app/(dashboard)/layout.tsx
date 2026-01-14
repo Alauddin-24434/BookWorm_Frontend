@@ -39,7 +39,7 @@ export default function DashboardLayout({
           </h1>
         </header>
         
-        <div className="p-4 md:p-8">
+        <div className="p-4 md:p-8 bg-white">
           {children}
         </div>
       </main>

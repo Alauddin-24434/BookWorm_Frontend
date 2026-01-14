@@ -198,13 +198,13 @@ const columns: TableColumn[] = [
   { key: "author", label: "Author" },
 ];
   return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="p-4 md:p-8  min-h-screen">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border">
         <div>
           <h1 className="text-3xl font-serif font-bold text-gray-900">Book Inventory</h1>
           <p className="text-gray-500 text-sm">Manage your library's digital collection</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow-md transition-all">
+        <button onClick={() => setShowModal(true)} className="w-full md:w-auto flex cursor-pointer items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow-md transition-all">
           <UploadCloud size={20} /> Add New Book
         </button>
       </div>

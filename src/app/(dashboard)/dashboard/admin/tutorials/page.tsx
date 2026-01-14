@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Pencil, Trash2, Video, Plus, X } from "lucide-react";
+import { Pencil, Trash2, Video, Plus, X, VideoIcon } from "lucide-react";
 import {
   useGetTutorialsQuery,
   useCreateTutorialMutation,
@@ -91,26 +91,27 @@ const handleSubmit = async (e: React.FormEvent) => {
   const modalVideoId = getYouTubeId(formData.youtubeURL);
 
   return (
-    <div className="px-4 py-8 max-w-7xl mx-auto min-h-screen">
+    <div className="p-2 py-8 ">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-        <div className="flex items-center gap-4">
-          <div className="bg-blue-100 p-3 rounded-xl">
-            <Video className="text-blue-600" size={28} />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Manage Tutorials</h1>
-            <p className="text-gray-500 text-sm">Organize and update your video library</p>
-          </div>
+     
+     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">
+            {" "}
+           Manage Tutorials
+          </h1>
+          <p className="text-gray-500 text-sm">
+         Organize and update your video library
+          </p>
         </div>
         <button
           onClick={openModal}
-          className="flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-200 transition-all font-bold active:scale-95"
+          className="w-full md:w-auto flex items-center cursor-pointer justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow-md transition-all"
         >
-          <Plus size={20} />
-          Add New Tutorial
+          <VideoIcon size={20} />     Add New Tutorial
         </button>
       </div>
+      
 
       {/* Cards Section */}
       {isLoading ? (
@@ -182,7 +183,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       {/* Modal Section (Add/Edit) */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md px-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
             <div className="flex justify-between items-center border-b px-8 py-5 bg-gray-50/50">
               <h2 className="text-2xl font-bold text-gray-800">

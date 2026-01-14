@@ -62,7 +62,12 @@ const items: SidebarItem[] = [
     roles: ["admin"],
   },
 
-
+  {
+    title: "Tutorials",
+    url: "/tutorials",
+    icon: Video,
+    roles: ["user"],
+  },
 
   {
     title: "Moderate Reviews",

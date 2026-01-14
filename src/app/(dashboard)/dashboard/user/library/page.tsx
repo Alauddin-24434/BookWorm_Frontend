@@ -1,112 +1,63 @@
-'use client';
+// src/app/(dashboard)/dashboard/user/library/page.tsx
 
-import BookCard from '@/components/books/BookCard';
-import { Shelf } from '@/types';
-import { useEffect, useState } from 'react';
+import { store } from "@/redux/store";
 
-import toast from 'react-hot-toast';
+import { headers } from "next/headers";
+import Link from "next/link";
+import BookCard from "@/components/books/BookCard";
+import { libraryApi } from "@/redux/features/library/libraryApi";
 
-export default function LibraryPage() {
-  const [shelves, setShelves] = useState<Shelf[]>([]);
-  const [activeTab, setActiveTab] = useState<'wantToRead' | 'currentlyReading' | 'read'>('wantToRead');
-  const [loading, setLoading] = useState(true);
+export default async function LibraryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ shelf?: string }>;
+}) {
+  const params = await searchParams;
+  const activeTab = params.shelf || "wantToRead";
 
-  useEffect(() => {
-    fetchShelves();
-  }, []);
+  // RTK Query initiate function call
+  const result = await store.dispatch(
+    libraryApi.endpoints.getUserLibrary.initiate(undefined, {
+   
+      forceRefetch: true,
+    })
+  );
 
-  const fetchShelves = async () => {
-    try {
-      const userId = "6965e7f5eeeeab78d5620286";
-      const response = await fetch(`http://localhost:5000/api/v1/user-library/${userId}`);
-      const data= await response.json();
-      setShelves(data.data);
-    } catch (error) {
-      toast.error('Failed to load library');
-    } finally {
-      setLoading(false);
-    }
-  };
-  console.log("Shelves", shelves);
-
-  const filteredShelves = shelves?.filter(shelf => shelf.shelfType === activeTab);
+  const shelves = result.data || [];
+  const filteredShelves = shelves.filter((shelf) => shelf.shelfType === activeTab);
 
   const tabs = [
-    { key: 'wantToRead' as const, label: 'Want to Read', emoji: '📚' },
-    { key: 'currentlyReading' as const, label: 'Currently Reading', emoji: '📖' },
-    { key: 'read' as const, label: 'Read', emoji: '✓' },
+    { key: "wantToRead", label: "Want to Read", emoji: "📚" },
+    { key: "currentlyReading", label: "Currently Reading", emoji: "📖" },
+    { key: "read", label: "Read", emoji: "✓" },
   ];
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your library...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="p-2 py-8">
-      <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">My Library</h1>
-
-      {/* Tabs */}
-      <div className="flex space-x-4 mb-8 border-b border-gray-200">
+    <div className="p-4 py-8 container mx-auto">
+      <h1 className="text-3xl font-bold mb-6">My Library</h1>
+      
+      {/* Tab Navigation */}
+      <div className="flex gap-4 border-b mb-6">
         {tabs.map((tab) => (
-          <button
+          <Link
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`pb-4 px-6 font-medium transition-colors duration-200 border-b-2 ${
-              activeTab === tab.key
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            href={`?shelf=${tab.key}`}
+            className={`pb-2 px-4 ${activeTab === tab.key ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500'}`}
           >
-            <span className="mr-2">{tab.emoji}</span>
-            {tab.label} ({shelves.filter(s => s.shelfType === tab.key).length})
-          </button>
+            {tab.emoji} {tab.label} ({shelves.filter(s => s.shelfType === tab.key).length})
+          </Link>
         ))}
       </div>
 
-      {/* Books Grid */}
-      {filteredShelves.length === 0 ? (
-        <div className="text-center py-16">
-          <div className="text-6xl mb-4">📚</div>
-          <h3 className="text-xl font-serif font-semibold text-gray-800 mb-2">
-            No books in this shelf yet
-          </h3>
-          <p className="text-gray-600 mb-6">Start adding books to your library!</p>
-          <a
-            href="/browse"
-            className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200"
-          >
-            Browse Books
-          </a>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {filteredShelves.map((shelf) => (
-            <div key={shelf._id}>
-              <BookCard book={shelf.book} />
-              {shelf.shelfType === 'currentlyReading' && shelf.progress && (
-                <div className="mt-2 px-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${shelf.progress.percentage}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-gray-600 mt-1 text-center">
-                    {shelf.progress.pagesRead} / {shelf.book.totalPages} pages
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        {filteredShelves.map((shelf) => (
+          <div key={shelf._id}>
+            <BookCard book={shelf.book} />
+            {/* Progress bar logic if needed */}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
