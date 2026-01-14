@@ -1,10 +1,9 @@
-
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Mutex } from 'async-mutex';
-import { logout, setUser, User } from './features/auth/authSlice';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Mutex } from "async-mutex";
+import { logout, setUser, User } from "./features/auth/authSlice";
 
 interface ITokenAndRefresh {
-  accessToken: string; 
+  accessToken: string;
   user: User;
 }
 
@@ -16,12 +15,12 @@ interface IRefreshResponse {
 const mutex = new Mutex();
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5000/api/v1',
-  credentials: 'include',
+  baseUrl: "https://bokworm-server.vercel.app/api/v1",
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as any).bookWormAuth.token;
     if (token) {
-      headers.set('authorization', `Bearer ${token}`);
+      headers.set("authorization", `Bearer ${token}`);
     }
     return headers;
   },
@@ -30,7 +29,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth: typeof baseQuery = async (
   args,
   api,
-  extraOptions,
+  extraOptions
 ) => {
   await mutex.waitForUnlock();
 
@@ -47,9 +46,9 @@ const baseQueryWithReauth: typeof baseQuery = async (
         // console.log('🔁 Attempting token refresh...');
 
         const refreshResult = await baseQuery(
-          { url: '/auth/refresh-token', method: 'POST' },
+          { url: "/auth/refresh-token", method: "POST" },
           api,
-          extraOptions,
+          extraOptions
         );
 
         // console.log('🔁 Refresh Response:', refreshResult);
@@ -83,17 +82,16 @@ const baseQueryWithReauth: typeof baseQuery = async (
 };
 
 const baseApi = createApi({
-  reducerPath: 'baseApi',
+  reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
   tagTypes: [
-
-    'User',
-    'Reviews',
-    'Genres',
-    'Books',
-    'Users',
-    'Tutorials',
-    'Library'
+    "User",
+    "Reviews",
+    "Genres",
+    "Books",
+    "Users",
+    "Tutorials",
+    "Library",
   ],
   endpoints: () => ({}),
 });

@@ -5,12 +5,16 @@ import SearchHeader from "@/components/sideBarHeader";
 import FilterSidebar from "@/components/filterSideBar";
 
 async function getGenres(): Promise<Genre[]> {
-  const res = await fetch("http://localhost:5000/api/v1/genre", { next: { revalidate: 3600 } });
+  const res = await fetch("https://bokworm-server.vercel.app/api/v1/genre", {
+    next: { revalidate: 3600 },
+  });
   const data = await res.json();
   return data.data || [];
 }
 
-async function getBooks(searchParams: any): Promise<{data: Book[], pagination: any}> {
+async function getBooks(
+  searchParams: any
+): Promise<{ data: Book[]; pagination: any }> {
   const urlParams = new URLSearchParams();
 
   // Iterate over the object and append values correctly
@@ -26,8 +30,8 @@ async function getBooks(searchParams: any): Promise<{data: Book[], pagination: a
   });
 
   const res = await fetch(
-    `http://localhost:5000/api/v1/books?${urlParams.toString()}`, 
-    { cache: 'no-store' }
+    `https://bokworm-server.vercel.app/api/v1/books?${urlParams.toString()}`,
+    { cache: "no-store" }
   );
 
   if (!res.ok) {
@@ -37,7 +41,11 @@ async function getBooks(searchParams: any): Promise<{data: Book[], pagination: a
   return res.json();
 }
 
-export default async function BrowsePage({ searchParams }: { searchParams: any }) {
+export default async function BrowsePage({
+  searchParams,
+}: {
+  searchParams: any;
+}) {
   const genres = await getGenres();
   const { data: books, pagination } = await getBooks(searchParams);
 
@@ -49,7 +57,10 @@ export default async function BrowsePage({ searchParams }: { searchParams: any }
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Client-side Sidebar for interactivity */}
           <aside className="lg:col-span-1">
-            <FilterSidebar genres={genres} selectedGenres={searchParams.genre || ""} />
+            <FilterSidebar
+              genres={genres}
+              selectedGenres={searchParams.genre || ""}
+            />
           </aside>
 
           <main className="lg:col-span-3">
@@ -61,12 +72,30 @@ export default async function BrowsePage({ searchParams }: { searchParams: any }
 
             {/* Pagination UI */}
             {pagination?.pages > 1 && (
-               <div className="mt-12 flex justify-center gap-4">
-                  {/* Link-based pagination for SEO */}
-                  <a href={`?page=${Math.max(1, Number(searchParams.page || 1) - 1)}`} className="p-3 border rounded-xl bg-white">Prev</a>
-                  <span className="p-3 font-bold">{searchParams.page || 1} of {pagination.pages}</span>
-                  <a href={`?page=${Math.min(pagination.pages, Number(searchParams.page || 1) + 1)}`} className="p-3 border rounded-xl bg-white">Next</a>
-               </div>
+              <div className="mt-12 flex justify-center gap-4">
+                {/* Link-based pagination for SEO */}
+                <a
+                  href={`?page=${Math.max(
+                    1,
+                    Number(searchParams.page || 1) - 1
+                  )}`}
+                  className="p-3 border rounded-xl bg-white"
+                >
+                  Prev
+                </a>
+                <span className="p-3 font-bold">
+                  {searchParams.page || 1} of {pagination.pages}
+                </span>
+                <a
+                  href={`?page=${Math.min(
+                    pagination.pages,
+                    Number(searchParams.page || 1) + 1
+                  )}`}
+                  className="p-3 border rounded-xl bg-white"
+                >
+                  Next
+                </a>
+              </div>
             )}
           </main>
         </div>
