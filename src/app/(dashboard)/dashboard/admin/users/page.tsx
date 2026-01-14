@@ -1,68 +1,81 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import Image from "next/image";
+import React from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { ResponsiveTable, TableColumn } from "@/components/shared/table";
+import { Trash2, ShieldCheck, UserCog } from "lucide-react";
+import { 
+  useGetAllUsersQuery, 
+  useUpdateUserRoleMutation, 
+  useDeleteUserMutation 
+} from "@/redux/features/user/userApi";
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // --- RTK Query ---
+  const { data: usersData, isLoading } = useGetAllUsersQuery(undefined);
+  const [updateRole] = useUpdateUserRoleMutation();
 
-  useEffect(() => {
-    // fetchUsers();
-  }, []);
+  const users = usersData?.data || [];
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await api.get("/users");
-  //     setUsers(response.data.data);
-  //   } catch (error) {
-  //     toast.error("Failed to load users");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  const updateRole = async (userId: string, newRole: string) => {
+  // --- Handlers ---
+  const handleRoleUpdate = async (userId: string, currentRole: string) => {
+    const newRole = currentRole === "admin" ? "user" : "admin";
+    const loadingToast = toast.loading("Updating role...");
     try {
-      await api.patch(`/users/${userId}/role`, { role: newRole });
-      toast.success("User role updated");
-      // fetchUsers();
-    } catch (error) {
-      toast.error("Failed to update role");
+      await updateRole({ userId, role: newRole }).unwrap();
+      toast.success(`User promoted to ${newRole}`, { id: loadingToast });
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update role", { id: loadingToast });
     }
   };
 
-  // Table Columns
+
+  // --- Table Columns ---
   const columns: TableColumn[] = [
-    { key: "name", label: "Genre Name" },
-    { key: "description", label: "Description" },
+    { key: "name", label: "User Name" },
+    { key: "email", label: "Email Address" },
+    { 
+      key: "role", 
+      label: "Role",
+      render: (row) => (
+        <span className={`px-2 py-1 rounded-full text-xs font-bold uppercase ${
+          row.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+        }`}>
+          {row.role}
+        </span>
+      )
+    },
   ];
 
   const actions = (row: any) => (
-    <div className="flex items-center space-x-3">
-      <button className="text-blue-600 hover:text-blue-900 font-medium transition-colors">
-        Edit
+    <div className="flex items-center justify-center gap-3">
+      <button 
+        onClick={() => handleRoleUpdate(row._id, row.role)}
+        className="p-2 text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg transition-colors"
+        title="Change Role"
+      >
+        <UserCog size={18} /> 
       </button>
-      <button className="text-red-600 hover:text-red-900 font-medium transition-colors"></button>
+      
     </div>
   );
 
   return (
-    <div className="p-2  py-8">
-      <h1 className="text-4xl rounded-lg px-4 py-2 font-serif font-bold text-gray-900 mb-8 border">
-        Manage Users
-      </h1>
+    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+      <div className="mb-8">
+        <h1 className="text-3xl font-serif font-bold text-gray-900">Manage Users</h1>
+        <p className="text-gray-500 text-sm">Update permissions and manage accounts</p>
+      </div>
 
-      {/* Table */}
-      <ResponsiveTable
-        columns={columns}
-        data={users}
-        actions={actions}
-        loading={loading}
-      />
+      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <ResponsiveTable
+          columns={columns}
+          data={users}
+          actions={actions}
+          loading={isLoading}
+        />
+      </div>
+      <Toaster position="bottom-right" />
     </div>
   );
 }

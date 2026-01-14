@@ -2,8 +2,6 @@
 
 import Footer from "../../components/layout/Footer";
 import Navbar from "../../components/layout/Navbar";
-import ProtectedRoute from "../../components/ProtectedRoute";
-
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (

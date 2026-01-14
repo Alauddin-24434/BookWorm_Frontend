@@ -37,30 +37,33 @@ const items: SidebarItem[] = [
   },
   { title: "My Library", url: "/dashboard/user/library", icon: BookOpen, roles: ["user"] },
   { title: "Browse Books", url: "/browse", icon: Search, roles: ["user"] },
-  {
-    title: "Tutorials",
-    url: "/dashboard/admin/tutorials",
-    icon: Video,
-    roles: ["admin"],
-  },
-  {
+    {
     title: "Manage Users",
     url: "/dashboard/admin/users",
     icon: Users,
     roles: ["admin"],
   },
-  {
+    {
+    title: "Manage Genres",
+    url: "/dashboard/admin/genres",
+    icon: Tag,
+    roles: ["admin"],
+  },
+    {
     title: "Manage Books",
     url: "/dashboard/admin/books",
     icon: BookOpen,
     roles: ["admin"],
   },
   {
-    title: "Manage Genres",
-    url: "/dashboard/admin/genres",
-    icon: Tag,
+    title: "Tutorials",
+    url: "/dashboard/admin/tutorials",
+    icon: Video,
     roles: ["admin"],
   },
+
+
+
   {
     title: "Moderate Reviews",
     url: "/dashboard/admin/reviews",
@@ -102,26 +105,27 @@ export function AppSidebar({ user }: AppSidebarProps) {
   
       <SidebarHeader className="border-b border-sidebar-border pb-4 mb-2">
         {/* Wrap the content with Link to make it clickable */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors rounded-lg group"
-        >
-          <Avatar className="h-10 w-10 border border-primary/20 shrink-0">
-            <AvatarImage src={user?.profilePhoto} alt={user?.name} />
-            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              {user.name?.charAt(0).toUpperCase() || "U"}
-            </AvatarFallback>
-          </Avatar>
+   <Link
+  // Dynamic route based on role
+  href={user?.role === "admin" ? "/dashboard" : "/dashboard/user/library"}
+  className="flex items-center gap-3 px-4 py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors rounded-lg group"
+>
+  <Avatar className="h-10 w-10 border border-primary/20 shrink-0">
+    <AvatarImage src={user?.profilePhoto} alt={user?.name} />
+    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+      {user?.name?.charAt(0).toUpperCase() || "U"}
+    </AvatarFallback>
+  </Avatar>
 
-          <div className="flex flex-col overflow-hidden text-left">
-            <span className="text-sm font-semibold truncate text-sidebar-foreground group-hover:text-primary transition-colors">
-              {user?.name}
-            </span>
-            <span className="text-xs text-muted-foreground capitalize">
-              {user?.role}
-            </span>
-          </div>
-        </Link>
+  <div className="flex flex-col overflow-hidden text-left">
+    <span className="text-sm font-semibold truncate text-sidebar-foreground group-hover:text-primary transition-colors">
+      {user?.name}
+    </span>
+    <span className="text-xs text-muted-foreground capitalize">
+      {user?.role}
+    </span>
+  </div>
+</Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

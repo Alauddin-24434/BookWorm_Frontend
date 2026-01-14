@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "../../../lib/api";
+
 import { Book, Genre } from "../../../types";
 import BookCard from "../../../components/books/BookCard";
 import toast from "react-hot-toast";

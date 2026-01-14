@@ -111,7 +111,7 @@ const actions = (row: any) => (
         <div className="w-full md:w-auto flex justify-end">
           <button
             onClick={openModal}
-            className="btn-primary px-6 py-2 rounded-lg shadow hover:shadow-lg transition-all"
+          className="flex cursor-pointer items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-200 transition-all font-bold active:scale-95"
           >
             Add New Genre
           </button>

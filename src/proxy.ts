@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
-export function proxy(request: NextRequest) { // আপনি ভুলবশত proxy লিখেছিলেন, এটা middleware হবে
+export function proxy(request: NextRequest) { 
   const token = request.cookies.get("refreshToken")?.value;
   const { pathname } = request.nextUrl;
 

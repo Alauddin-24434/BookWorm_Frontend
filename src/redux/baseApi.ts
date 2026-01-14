@@ -47,7 +47,7 @@ const baseQueryWithReauth: typeof baseQuery = async (
         // console.log('🔁 Attempting token refresh...');
 
         const refreshResult = await baseQuery(
-          { url: '/users/refresh-token', method: 'POST' },
+          { url: '/auth/refresh-token', method: 'POST' },
           api,
           extraOptions,
         );
@@ -91,7 +91,8 @@ const baseApi = createApi({
     'Review',
     'Genres',
     'Books',
-    'Users'
+    'Users',
+    'Tutorials'
   ],
   endpoints: () => ({}),
 });
