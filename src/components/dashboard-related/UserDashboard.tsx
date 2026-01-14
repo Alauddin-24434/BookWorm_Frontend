@@ -1,97 +1,65 @@
 'use client';
 
-import { Book } from '@/types';
-import { useEffect, useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-import toast from 'react-hot-toast';
-import BookCard from '../books/BookCard';
-
-export default function DashboardPage() {
-  const [recommendations, setRecommendations] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchRecommendations();
-  }, []);
-
-  const fetchRecommendations = async () => {
-    try {
-      const response = await fetch('/recommendations');
-      const data= await response.json();
-      setRecommendations(data.data);
-    } catch (error) {
-      toast.error('Failed to load recommendations');
-    } finally {
-      setLoading(false);
-    }
-  };
+export default function UserDashboard({ stats }: { stats: any }) {
+  const goalPercentage = Math.min(Math.round((stats?.booksReadThisYear / stats?.annualGoal) * 100), 100);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero */}
-      <div className="mb-12 text-center">
-        <h1 className="text-5xl font-serif font-bold text-gradient mb-4">
-          Welcome to Your Reading Journey
-        </h1>
-        <p className="text-xl text-gray-600">
-          Discover your next favorite book with personalized recommendations
-        </p>
-      </div>
+    <div className="p-2 py-8">
+      <header className="mb-10">
+        <h1 className="text-3xl font-bold">Welcome Back!</h1>
+        <p className="text-gray-500">Track your reading progress and challenges.</p>
+      </header>
 
-      {/* Recommendations */}
-      <div className="mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-serif font-bold text-gray-900">
-            Recommended for You
-          </h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Annual Goal Circular Progress */}
+        <div className="bg-white border rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+          <h3 className="font-bold mb-4">2026 Reading Goal</h3>
+          <div className="relative h-32 w-32 mb-4">
+            <svg className="h-full w-full" viewBox="0 0 36 36">
+              <path className="text-gray-100" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path className="text-blue-600" strokeDasharray={`${goalPercentage}, 100`} strokeWidth="3" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center font-bold text-xl">
+              {goalPercentage}%
+            </div>
+          </div>
+          <p className="text-sm font-medium">{stats?.booksReadThisYear} / {stats?.annualGoal} Books Read</p>
         </div>
 
-        {loading ? (
-          <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading recommendations...</p>
+        {/* Stats Cards */}
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+            <p className="text-blue-600 text-sm font-bold uppercase tracking-wider">Total Pages Read</p>
+            <p className="text-4xl font-black mt-2">{stats?.totalPagesRead}</p>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            {recommendations.map((book) => (
-              <BookCard key={book._id} book={book} />
-            ))}
+          <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+            <p className="text-orange-600 text-sm font-bold uppercase tracking-wider">Avg. Rating Given</p>
+            <p className="text-4xl font-black mt-2">{stats?.averageRating} ⭐</p>
           </div>
-        )}
+          <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
+            <p className="text-green-600 text-sm font-bold uppercase tracking-wider">Current Streak</p>
+            <p className="text-4xl font-black mt-2">{stats?.readingStreak} Days 🔥</p>
+          </div>
+        </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <a href="/browse" className="card p-6 hover:shadow-xl transition-shadow">
-          <div className="text-4xl mb-4">📚</div>
-          <h3 className="text-xl font-serif font-semibold text-gray-800 mb-2">
-            Browse Books
-          </h3>
-          <p className="text-gray-600">
-            Explore our entire collection with advanced filters
-          </p>
-        </a>
-
-        <a href="/library" className="card p-6 hover:shadow-xl transition-shadow">
-          <div className="text-4xl mb-4">📖</div>
-          <h3 className="text-xl font-serif font-semibold text-gray-800 mb-2">
-            My Library
-          </h3>
-          <p className="text-gray-600">
-            View and manage your reading lists
-          </p>
-        </a>
-
-        <a href="/tutorials" className="card p-6 hover:shadow-xl transition-shadow">
-          <div className="text-4xl mb-4">🎥</div>
-          <h3 className="text-xl font-serif font-semibold text-gray-800 mb-2">
-            Tutorials
-          </h3>
-          <p className="text-gray-600">
-            Watch book reviews and reading tips
-          </p>
-        </a>
+      {/* Monthly Bar Chart */}
+      <div className="bg-white border rounded-2xl p-6">
+        <h3 className="font-bold mb-6">Books Read by Month</h3>
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={stats?.monthlyStats}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="_id" tickFormatter={(val) => `Month ${val}`} />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
-} 
+}

@@ -32,7 +32,7 @@ export default function SignupPage() {
     reset,
     formState: { errors },
   } = useForm<SignupFormData>();
-  
+
   const onSubmit = async (data: SignupFormData) => {
     try {
       const formData = new FormData();
@@ -47,8 +47,8 @@ export default function SignupPage() {
       }
 
       const response = await signup(formData).unwrap();
-      const { user, accessToken } = response.data;
-
+      const { result, accessToken } = response.data;
+      const user = result;
       dispatch(setUser({ user, token: accessToken }));
 
       reset();

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Calendar, Home, Inbox, Search, Settings, Users, BookOpen, Tag, Video } from "lucide-react";
+import { Home, Inbox, Search, Users, BookOpen, Tag, Video, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,46 +10,133 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter, // Added SidebarHeader
 } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/features/auth/authSlice";
+import { logoutAction } from "@/app/actions/auth/auth";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface SidebarItem {
   title: string;
   url: string;
   icon: React.ComponentType<any>;
-  roles: ('admin' | 'user')[];
+  roles: ("admin" | "user")[];
 }
 
-// Define sidebar items with role access
 const items: SidebarItem[] = [
-  { title: "Home", url: "/dashboard", icon: Home, roles: ['admin', 'user'] },
-  { title: "My Library", url: "/library", icon: BookOpen, roles: ['user'] },
-  { title: "Browse Books", url: "/browse", icon: Search, roles: ['user'] },
-  { title: "Tutorials", url: "/dashboard/admin/tutorials", icon: Video, roles: ['admin'] },
-  { title: "Manage Users", url: "/dashboard/admin/users", icon: Users, roles: ['admin'] },
-  { title: "Manage Books", url: "/dashboard/admin/books", icon: BookOpen, roles: ['admin'] },
-  { title: "Manage Genres", url: "/dashboard/admin/genres", icon: Tag, roles: ['admin'] },
-  { title: "Moderate Reviews", url: "/dashboard/admin/reviews", icon: Inbox, roles: ['admin'] },
-
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: Home,
+    roles: ["admin", "user"],
+  },
+  { title: "My Library", url: "/dashboard/user/library", icon: BookOpen, roles: ["user"] },
+  { title: "Browse Books", url: "/browse", icon: Search, roles: ["user"] },
+  {
+    title: "Tutorials",
+    url: "/dashboard/admin/tutorials",
+    icon: Video,
+    roles: ["admin"],
+  },
+  {
+    title: "Manage Users",
+    url: "/dashboard/admin/users",
+    icon: Users,
+    roles: ["admin"],
+  },
+  {
+    title: "Manage Books",
+    url: "/dashboard/admin/books",
+    icon: BookOpen,
+    roles: ["admin"],
+  },
+  {
+    title: "Manage Genres",
+    url: "/dashboard/admin/genres",
+    icon: Tag,
+    roles: ["admin"],
+  },
+  {
+    title: "Moderate Reviews",
+    url: "/dashboard/admin/reviews",
+    icon: Inbox,
+    roles: ["admin"],
+  },
 ];
 
 interface AppSidebarProps {
-  role: 'admin' | 'user';
+  user: {
+    name: string;
+    role: "admin" | "user";
+    profilePhoto?: string;
+  };
 }
 
-export function AppSidebar({ role }: AppSidebarProps) {
+export function AppSidebar({ user }: AppSidebarProps) {
+
+  const dispatch = useDispatch();
+
+  const router = useRouter();
+
+
+  const handleLogout = async () => {
+  // 1. Clear Redux
+  dispatch(logout());
+
+  // 2. Clear Cookie via Server Action
+  await logoutAction();
+
+  // 3. Notify and Redirect
+  toast.success("Logged out successfully");
+  router.push('/login');
+};
+
   return (
     <Sidebar>
+      {/* --- Profile Header Section --- */}
+  
+      <SidebarHeader className="border-b border-sidebar-border pb-4 mb-2">
+        {/* Wrap the content with Link to make it clickable */}
+        <Link
+          href="/"
+          className="flex items-center gap-3 px-4 py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors rounded-lg group"
+        >
+          <Avatar className="h-10 w-10 border border-primary/20 shrink-0">
+            <AvatarImage src={user?.profilePhoto} alt={user?.name} />
+            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+              {user.name?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex flex-col overflow-hidden text-left">
+            <span className="text-sm font-semibold truncate text-sidebar-foreground group-hover:text-primary transition-colors">
+              {user.name}
+            </span>
+            <span className="text-xs text-muted-foreground capitalize">
+              {user.role}
+            </span>
+          </div>
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items
-                .filter(item => item.roles.includes(role)) // filter by role
-                .map(item => (
+                .filter((item) => item.roles.includes(user.role))
+                .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url} className="flex items-center space-x-2">
+                      <a
+                        href={item.url}
+                        className="flex items-center space-x-2"
+                      >
                         <item.icon className="w-5 h-5" />
                         <span>{item.title}</span>
                       </a>
@@ -60,6 +147,20 @@ export function AppSidebar({ role }: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      {/* --- Logout Footer Section --- */}
+      <SidebarFooter className="p-4 border-t border-sidebar-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton 
+              onClick={handleLogout}
+              className="w-full text-red-500 bg-gray-50 border cursor-pointer hover:text-red-600 hover:bg-red-50/10 transition-colors"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="font-medium">Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

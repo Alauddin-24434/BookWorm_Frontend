@@ -1,9 +1,9 @@
 'use client';
 
+import BookCard from '@/components/books/BookCard';
+import { Shelf } from '@/types';
 import { useEffect, useState } from 'react';
-import api from '../../../lib/api';
-import { Shelf } from '../../../types';
-import BookCard from '../../../components/books/BookCard';
+
 import toast from 'react-hot-toast';
 
 export default function LibraryPage() {
@@ -49,7 +49,7 @@ export default function LibraryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="p-2 py-8">
       <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">My Library</h1>
 
       {/* Tabs */}

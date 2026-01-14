@@ -1,52 +1,64 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import api from '@/lib/api';
-import toast from 'react-hot-toast';
 import AdminDashboard from '@/components/dashboard-related/AdminDashboard';
-import DashboardPage from '@/components/dashboard-related/UserDashboard';
+import UserDashboard from '@/components/dashboard-related/UserDashboard';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-}
+import { Loader2 } from "lucide-react";
+import { useGetStatsQuery } from '@/redux/features/auth/authApi';
 
- function DashboardWrapper() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+function DashboardWrapper() {
+  const user = useSelector(selectCurrentUser);
 
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
+ 
+  const { data, isLoading, isError } = useGetStatsQuery(undefined, {
+    skip: !user,
+  });
 
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await api.get('/auth/me'); // fetch logged-in user
-      setUser(response.data.data);
-    } catch (error) {
-      toast.error('Failed to load user data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
+  if (!user) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-500 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading dashboard...</p>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p className="text-gray-500 font-medium italic">
+          Please login to access your workspace.
+        </p>
       </div>
     );
   }
 
-  // if (!user) {
-  //   return <p className="text-center py-12 text-gray-700">Please login to view your dashboard</p>;
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+        <p className="text-muted-foreground animate-pulse">Loading dashboard data...</p>
+      </div>
+    );
+  }
 
-  return "admin" === 'admin' ? <AdminDashboard /> : <DashboardPage />;
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="bg-red-50 p-6 rounded-lg border border-red-200 text-center">
+          <p className="text-red-600 font-semibold">Error loading statistics!</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-2 text-sm underline text-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
+  const stats = data?.data; 
+
+  return user.role === 'admin' ? (
+    <AdminDashboard stats={stats} />
+  ) : (
+    <UserDashboard stats={stats} />
+  );
 }
 
 export default DashboardWrapper;

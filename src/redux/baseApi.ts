@@ -89,7 +89,7 @@ const baseApi = createApi({
 
     'User',
     'Review',
-    'Genre',
+    'Genres',
     'Book',
     'Cart',
   ],
