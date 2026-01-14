@@ -196,7 +196,7 @@ const actions = (row: any) => (
           </div>
         </div>
       )}
-      <Toaster position="top-center" />
+      <Toaster position="top-right" />
     </div>
   );
 }

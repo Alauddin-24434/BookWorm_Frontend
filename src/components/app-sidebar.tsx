@@ -115,10 +115,10 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
           <div className="flex flex-col overflow-hidden text-left">
             <span className="text-sm font-semibold truncate text-sidebar-foreground group-hover:text-primary transition-colors">
-              {user.name}
+              {user?.name}
             </span>
             <span className="text-xs text-muted-foreground capitalize">
-              {user.role}
+              {user?.role}
             </span>
           </div>
         </Link>
@@ -129,7 +129,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               {items
-                .filter((item) => item.roles.includes(user.role))
+                .filter((item) => item.roles.includes(user?.role))
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>

@@ -22,7 +22,7 @@ export default function BookDetailsPage() {
   const fetchBookDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/book/${params.id}`
+        `http://localhost:5000/api/v1/books/${params.id}`
       );
       const data = await response.json();
       setBook(data?.data);

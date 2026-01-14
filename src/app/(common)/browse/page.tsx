@@ -53,7 +53,7 @@ export default function BrowsePage() {
       if (selectedGenres.length > 0) params.genre = selectedGenres;
 
       const queryString = new URLSearchParams(params).toString();
-      const response = await fetch(`http://localhost:5000/api/v1/book?${queryString}`);
+      const response = await fetch(`http://localhost:5000/api/v1/books?${queryString}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

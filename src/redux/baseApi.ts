@@ -90,7 +90,7 @@ const baseApi = createApi({
     'User',
     'Review',
     'Genres',
-    'Book',
+    'Books',
     'Cart',
   ],
   endpoints: () => ({}),

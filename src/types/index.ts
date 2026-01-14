@@ -7,6 +7,8 @@ export interface User {
 }
 
 export interface Book {
+  pdfFile: string;
+  pdfUrl: string;
   _id: string;
   title: string;
   author: string;
